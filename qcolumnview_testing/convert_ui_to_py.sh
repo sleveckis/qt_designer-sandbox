@@ -1,2 +1,2 @@
 #!/bin/bash
-pyuic6 -o generated_ui.py -x designer_file.ui
+pyside6-uic designer_file.ui > Ui_MainWindow.py
