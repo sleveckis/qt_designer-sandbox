@@ -15,22 +15,32 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QColumnView, QMainWindow, QMenuBar,
-    QPushButton, QSizePolicy, QStatusBar, QWidget)
+from PySide6.QtWidgets import (QApplication, QColumnView, QLabel, QListView,
+    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
+    QStatusBar, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(640, 480)
+        MainWindow.resize(640, 481)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.columnView = QColumnView(self.centralwidget)
-        self.columnView.setObjectName(u"columnView")
-        self.columnView.setGeometry(QRect(20, 20, 601, 341))
+        self.livdbColView = QColumnView(self.centralwidget)
+        self.livdbColView.setObjectName(u"livdbColView")
+        self.livdbColView.setGeometry(QRect(20, 30, 601, 151))
         self.cool_button = QPushButton(self.centralwidget)
         self.cool_button.setObjectName(u"cool_button")
         self.cool_button.setGeometry(QRect(20, 370, 601, 61))
+        self.livdbListView = QListView(self.centralwidget)
+        self.livdbListView.setObjectName(u"livdbListView")
+        self.livdbListView.setGeometry(QRect(20, 210, 591, 141))
+        self.label = QLabel(self.centralwidget)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(20, 10, 71, 16))
+        self.label_2 = QLabel(self.centralwidget)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(20, 190, 71, 16))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -48,5 +58,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.cool_button.setText(QCoreApplication.translate("MainWindow", u"TestButtonIfNeeded", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"QColumnView", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"QListView", None))
     # retranslateUi
 

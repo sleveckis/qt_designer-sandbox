@@ -11,20 +11,21 @@
 import sys
 
 from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import Qt
 from Ui_MainWindow import Ui_MainWindow
+from DatabaseConnect import connect_and_return_databases
 
 """
     Subclass of QAbstractListModel
     Both QColumnView and QListView are built off of QAbstractListModel
     For Testing Purposes I'm going to make both widgets
+
+    Overloaded constructor sets list data structure to what's given, or empty by default
 """
 class LivingDataListModel(QtCore.QAbstractListModel):
-    """
-        Elsewhere, we'll instantiate with an existing list, or an empty one
-    """
-    def __init__(self, list=None):
+    def __init__(self, db_list=None):
         super().__init__()
-        self.list = list or []
+        self.db_list = db_list or []
 
     #TODO: I have no idea if these work
 
@@ -34,10 +35,10 @@ class LivingDataListModel(QtCore.QAbstractListModel):
         if role == Qt.DisplayRole:
             # Return only the text (forseeably the database name / table name)
             # given the column is always zero in a 1D list, so just return row
-            return self.list[index.row()]
+            return self.db_list[index.row()]
 
     def rowCount(self, index):
-        return len(self.list)
+        return len(self.db_list)
 
 
 """
@@ -49,7 +50,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super().__init__()
         self.ui = Ui_MainWindow
         self.setupUi(self)
-        #self.model = LivingDataListModel()
+
+        # Get database list and put it in the model and set the model
+
+        list_o_dbs = connect_and_return_databases()
+
+        self.model = LivingDataListModel(list_o_dbs)
+
+        # Access the widgets here via Ui_MainWindow inheritance
+        self.livdbListView.setModel(self.model)
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
