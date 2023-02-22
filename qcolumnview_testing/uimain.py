@@ -64,44 +64,42 @@ class LivingDataListofListsModel(QtCore.QAbstractListModel):
         return len(self.db_list)
 """
 
-class CustomModel(QStandardItemModel):
-    def __init__(self):
-        super(CustomModel, self).__init__()
+"""
+"""
+class CustomQColumnModel(QStandardItemModel):
+    #TODO: method to stringify passed-in dictionary
+    #TODO: consider handling default behavior where no dictionary is passed in
+    def __init__(self, dba=None):
+        super(CustomQColumnModel, self).__init__()
+        self.dba = dba 
         self.setVerticalHeaderItem(0, QStandardItem("Database"))
         self.setVerticalHeaderItem(1, QStandardItem("Table"))
  
     def generate_tree(self):
- 
-        """
-        d_team = {"Inter": ["Handanovic", "D'Ambrosio", "De Vrij"],
-                  "Milan": ["Donnarumma", "Calabria", "Romagnoli"],
-                  "Juve": ["Szczezny", "De Sciglio", "Chiellini"]}
-        """
-
-        #TODO: numbers come up as a blank in the UI
-        test_dba = {
-            "dab1":  [101, "hellow", "yeehaw"],
-            "dab2":  [202, "salutations", "cowabunga"],
-            "dab3":  [303, "greetings", "weeeee"],
-            "dab4":  [404, "howdy", "expelliarmus"],
-        }
         # Here's the magic
-        for row, db in enumerate(test_dba.keys()):
-            self.setItem(row, 0, QStandardItem(db))
+        for row, db_name in enumerate(self.dba.keys()):
+            self.setItem(row, 0, QStandardItem(db_name))
             item = self.item(row, 0)
-            for rrow, table in enumerate(test_dba.get(item.text())):
-                item.setChild(rrow, 0, QStandardItem(table))
+            for rrow, table_name in enumerate(self.dba.get(item.text())):
+                # note: converting all table names to strings, in case they contain integers or are integers for some reason...
+                item.setChild(rrow, 0, QStandardItem(str(table_name)))
 
 """
     Subclassing from both PySide6 and our module we made from the .ui file
 """
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
+        test_dba = {
+            "dab1":  [101, "hellow", "yeehaw"],
+            "dab2":  [202, "salutations", "cowabunga"],
+            "dab3":  [303, "greetings", "weeeee"],
+            "dab4":  [404, "howdy", "expelliarmus"],
+        }
         # Ui_MainWindow has no __init__() so I guess it defaults to QMainWindow's constructor
         super().__init__()
         self.ui = Ui_MainWindow
         self.setupUi(self)
-        self.model = CustomModel()
+        self.model = CustomQColumnModel(test_dba)
         self.model.generate_tree() 
 
         # Get database list and put it in the model and set the model
